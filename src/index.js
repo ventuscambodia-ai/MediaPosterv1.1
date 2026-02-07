@@ -49,7 +49,7 @@ app.use(session({
         secure: isProduction, // true on Railway (HTTPS)
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        sameSite: isProduction ? 'none' : 'lax' // 'none' for cross-site cookies on production
+        sameSite: 'lax' // Same domain, so 'lax' is fine
     },
     name: 'mediaposter.sid'
 }));
