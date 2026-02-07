@@ -23,12 +23,17 @@ initializeDatabase();
 
 const app = express();
 
+// Trust proxy (required for Railway, Render, etc. - they use reverse proxies)
+app.set('trust proxy', 1);
+
 // Session store using SQLite (persists across server restarts)
 const SessionStore = SqliteStore(session);
 const sessionDb = new sqlite3(path.join(__dirname, '../sessions.db'));
 
 // Session configuration
 const sessionSecret = process.env.SESSION_SECRET || 'media-poster-dev-secret-change-in-production';
+const isProduction = process.env.NODE_ENV === 'production' || process.env.RAILWAY_ENVIRONMENT;
+
 app.use(session({
     store: new SessionStore({
         client: sessionDb,
@@ -41,10 +46,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProduction, // true on Railway (HTTPS)
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        sameSite: 'lax'
+        sameSite: isProduction ? 'none' : 'lax' // 'none' for cross-site cookies on production
     },
     name: 'mediaposter.sid'
 }));
