@@ -64,9 +64,19 @@ router.post('/', requireAuth, upload.array('media', uploadConfig.maxPhotos), asy
 
         // Get platforms from request
         const platformsRaw = req.body.platforms;
-        const platforms = Array.isArray(platformsRaw)
-            ? platformsRaw
-            : platformsRaw?.split(',').map(p => p.trim()) || [];
+        let platforms = [];
+
+        if (Array.isArray(platformsRaw)) {
+            platforms = platformsRaw;
+        } else if (typeof platformsRaw === 'string') {
+            // Try to parse as JSON first (e.g., '["facebook","telegram"]')
+            try {
+                platforms = JSON.parse(platformsRaw);
+            } catch (e) {
+                // Fall back to comma-separated
+                platforms = platformsRaw.split(',').map(p => p.trim());
+            }
+        }
 
         if (platforms.length === 0) {
             cleanupFiles(files);
