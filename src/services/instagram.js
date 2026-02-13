@@ -67,7 +67,10 @@ async function postSinglePhoto(publicUrl, caption, config) {
 
     const containerId = containerResponse.data.id;
 
-    // Step 2: Publish the container
+    // Step 2: Wait for media processing to finish
+    await waitForMediaReady(containerId, config.accessToken);
+
+    // Step 3: Publish the container
     return await publishMedia(containerId, config);
 }
 
