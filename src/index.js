@@ -60,6 +60,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../public')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // API routes
 app.use('/api/auth', authRoutes);
@@ -112,7 +113,7 @@ app.listen(PORT, () => {
     console.log('   • Facebook (photos & videos)');
     console.log('   • Telegram (photos & videos)');
     console.log('   • TikTok (videos only)');
-    console.log('   • Instagram (coming soon)');
+    console.log('   • Instagram (photos, videos & carousels)');
     console.log('   • YouTube (coming soon)');
     console.log('\n💡 Create an account to get started!\n');
 

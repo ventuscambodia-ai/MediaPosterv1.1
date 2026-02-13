@@ -1,6 +1,7 @@
 import { postToFacebook } from './facebook.js';
 import { postToTelegram } from './telegram.js';
 import { postToTikTok } from './tiktok.js';
+import { postToInstagram } from './instagram.js';
 import { isVideo } from '../utils/mediaHelper.js';
 
 /**
@@ -26,11 +27,7 @@ export async function postToAllPlatforms({ platforms, files, caption, userSettin
             case 'tiktok':
                 return postToTikTok(files, caption, mediaType, userSettings);
             case 'instagram':
-                return {
-                    success: false,
-                    platform: 'instagram',
-                    error: 'Instagram integration coming soon',
-                };
+                return postToInstagram(files, caption, mediaType, userSettings);
             case 'youtube':
                 return {
                     success: false,
